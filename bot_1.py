@@ -20,13 +20,13 @@ shirt    = pd.read_csv('Shirt.csv',header=None,sep='\t')
 phant    = pd.read_csv('phant.csv',header=None,sep='\t')
 belt     = pd.read_csv('belt.csv',header=None,sep='\t')
 wallet   = pd.read_csv('wallet.csv',header=None,sep='\t')
-watche   = pd.read_csv('watches.csv',header=None,sep='\t')
+watch    = pd.read_csv('watches.csv',header=None,sep='\t')
 
 shirt    = shirt.iloc[:,:].values
 phant    = phant.iloc[:,:].values
 belt     = belt.iloc[:,:].values
 wallet   = wallet.iloc[:,:].values
-watche   = watche.iloc[:,:].values
+watch    = watch.iloc[:,:].values
 
 
 #countvectorizer
@@ -122,14 +122,62 @@ def display_products(pred,chat_id,msg):
     recent.append(recent)
     return recent
 
-def confirm_booking(messege):
+def confirm_booking(command,recent):
+
+    if (recent[-1] == 'shirt':
+        for i in shirt:
+           if (shirt[i][0] == command):
+            bot.sendMessage(chat_id, shirt[i][1])
+            reply = 'Please type "confirm" to confirm the booking..'
+            bot.sendMessage(chat_id, reply)
+            
+           else:
+            reply = 'please enter valid number'
+            bot.sendMessage(chat_id, reply)
+        
+    elif (recent[-1] == 'phant':
+          for i in phant:
+           if (phant[i][0] == command):
+            bot.sendMessage(chat_id, phant[i][1])
+            reply = 'Please type "confirm" to confirm the booking..'
+            bot.sendMessage(chat_id, reply)
+           else:
+            reply = 'please enter valid number'
+            bot.sendMessage(chat_id, reply)
+    elif (recent[-1] == 'belt':
+          for i in belt:
+           if (belt[i][0] == command):
+            bot.sendMessage(chat_id, belt[i][1])
+            reply = 'Please type "confirm" to confirm the booking..'
+            bot.sendMessage(chat_id, reply)
+           else:
+            reply = 'please enter valid number'
+            bot.sendMessage(chat_id, reply)
+    elif (recent[-1] == 'wallet':
+          for i in wallet:
+           if (wallet[i][0] == command):
+            bot.sendMessage(chat_id, wallet[i][1])
+            reply = 'Please type "confirm" to confirm the booking..'
+            bot.sendMessage(chat_id, reply)
+           else:
+            reply = 'please enter valid number'
+            bot.sendMessage(chat_id, reply)
+    elif (recent[-1] == 'watch':
+          for i in watch:
+           if (watch[i][0] == command):
+            bot.sendMessage(chat_id, watch[i][1])
+            reply = 'Please type "confirm" to confirm the booking..'
+            bot.sendMessage(chat_id, reply)
+           else:
+            reply = 'please enter valid number'
+            bot.sendMessage(chat_id, reply)
+     
+    
+    
     
 
 def bot_session(message,chat_id,msg,temp):        
-   
-    if temp == 'numeric':
-        confirm_booking(message)
-    else:    
+      
         ip = message
         ip_1=np.append(ip,1)
         x1 = cv.transform(ip_1).toarray()
@@ -142,7 +190,8 @@ def bot_session(message,chat_id,msg,temp):
         bot.sendMessage(chat_id, reply)
         write_function(msg,reply)
         
-     
+          
+          
 
 def write_function(msg,reply):
     
@@ -167,12 +216,11 @@ def handle(msg):
     chat_id = msg['chat']['id']
     command = msg['text']
     if command.isnumeric():
-        temp = 'numeric'
-        message = str(command)
-        print ('Got command: %s' % message)
-        print(msg)
-        bot_session(message,chat_id,msg,temp)
-        recent = display_products(pred,chat_id,msg)
+       confirm_booking(command,recent)
+    elif command == 'Confirm'  or command == 'confirm' or command == 'CONFIRM' 
+        reply = 'Please send your contact number, our sales team will contact you soon'
+        bot.sendMessage(chat_id, reply)
+        
     else:
         temp = 'not'
         message = str(command)
