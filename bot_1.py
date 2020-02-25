@@ -173,10 +173,7 @@ def confirm_booking(command,recent):
             bot.sendMessage(chat_id, reply)
      
     
-    
-    
-
-def bot_session(message,chat_id,msg,temp):        
+def bot_session(message,chat_id,msg ):        
       
         ip = message
         ip_1=np.append(ip,1)
@@ -189,6 +186,8 @@ def bot_session(message,chat_id,msg,temp):
             reply = 'bye'   
         bot.sendMessage(chat_id, reply)
         write_function(msg,reply)
+        recent = display_products(pred,chat_id,msg)
+        return recent
         
           
           
@@ -217,17 +216,18 @@ def handle(msg):
     command = msg['text']
     if command.isnumeric():
        confirm_booking(command,recent)
-    elif command == 'Confirm'  or command == 'confirm' or command == 'CONFIRM' 
+    elif (command == 'Confirm'  or command == 'confirm' or command == 'CONFIRM'): 
         reply = 'Please send your contact number, our sales team will contact you soon'
         bot.sendMessage(chat_id, reply)
+        write_function(msg,reply)
         
     else:
         temp = 'not'
         message = str(command)
         print ('Got command: %s' % message)
         print(msg)
-        bot_session(message,chat_id,msg,temp)
-        recent = display_products(pred,chat_id,msg)
+        recent = bot_session(message,chat_id,msg)
+        
         
 
         
