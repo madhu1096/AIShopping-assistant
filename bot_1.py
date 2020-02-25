@@ -53,7 +53,7 @@ model.fit(X,y, batch_size = 32, epochs = 10)
 
 def display_products(pred,chat_id,msg):
     
-     
+    
     if pred == 2:
         for i in range(len(shirt)):
             bot.sendMessage(chat_id, shirt[i][1])
@@ -119,22 +119,29 @@ def display_products(pred,chat_id,msg):
             bot.sendMessage(chat_id, reply)
             write_function(msg,reply)
             recent = 'watch'
-     
+    recent.append(recent)
+    return recent
+
+def confirm_booking(messege):
+    
 
 def bot_session(message,chat_id,msg,temp):        
    
-    ip = message
-    ip_1=np.append(ip,1)
-    x1 = cv.transform(ip_1).toarray()
-    pred = model.predict_classes(x1)
-    pred = pred[0]-1
-    print(pred)
-    reply = str(dataset1.iloc[pred,1])
-    if ip == 'quit' or ip == 'Quit':
-        reply = 'bye'   
-    bot.sendMessage(chat_id, reply)
-    write_function(msg,reply)
-    display_products(pred,chat_id,msg)
+    if temp == 'numeric':
+        confirm_booking(message)
+    else:    
+        ip = message
+        ip_1=np.append(ip,1)
+        x1 = cv.transform(ip_1).toarray()
+        pred = model.predict_classes(x1)
+        pred = pred[0]-1
+        print(pred)
+        reply = str(dataset1.iloc[pred,1])
+        if ip == 'quit' or ip == 'Quit':
+            reply = 'bye'   
+        bot.sendMessage(chat_id, reply)
+        write_function(msg,reply)
+        
      
 
 def write_function(msg,reply):
@@ -165,23 +172,24 @@ def handle(msg):
         print ('Got command: %s' % message)
         print(msg)
         bot_session(message,chat_id,msg,temp)
+        recent = display_products(pred,chat_id,msg)
     else:
         temp = 'not'
         message = str(command)
         print ('Got command: %s' % message)
         print(msg)
         bot_session(message,chat_id,msg,temp)
+        recent = display_products(pred,chat_id,msg)
         
 
         
     
-
+recent = []
 bot = telepot.Bot('1070030315:AAG46yVpnlqNMQ4W3Z1g_iYFmtpSJEe1eY0')
 first_init = 'hi'
 first_init=np.append(first_init,1)
 x1=cv.transform(first_init).toarray()
 pred=model.predict_classes(x1)
-
 bot.message_loop(handle)
 
 
