@@ -119,7 +119,7 @@ def display_products(pred,chat_id,msg):
             bot.sendMessage(chat_id, reply)
             write_function(msg,reply)
             recent = 'watch'
-    return recent
+     
 
 def bot_session(message,chat_id,msg,temp):        
    
