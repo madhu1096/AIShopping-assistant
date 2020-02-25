@@ -53,7 +53,7 @@ model.fit(X,y, batch_size = 32, epochs = 10)
 
 def display_products(pred,chat_id,msg):
     
-    recent = None
+     
     if pred == 2:
         for i in range(len(shirt)):
             bot.sendMessage(chat_id, shirt[i][1])
@@ -134,8 +134,8 @@ def bot_session(message,chat_id,msg,temp):
         reply = 'bye'   
     bot.sendMessage(chat_id, reply)
     write_function(msg,reply)
-    recent = display_products(pred,chat_id,msg)
-    return recent
+    display_products(pred,chat_id,msg)
+     
 
 def write_function(msg,reply):
     
@@ -164,13 +164,13 @@ def handle(msg):
         message = str(command)
         print ('Got command: %s' % message)
         print(msg)
-        recent = bot_session(message,chat_id,msg,temp)
+        bot_session(message,chat_id,msg,temp)
     else:
         temp = 'not'
         message = str(command)
         print ('Got command: %s' % message)
         print(msg)
-        recent = bot_session(message,chat_id,msg,temp)
+        bot_session(message,chat_id,msg,temp)
         
 
         
