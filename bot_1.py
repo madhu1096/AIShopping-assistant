@@ -208,21 +208,36 @@ def write_function(msg,reply):
     file.write("BOT REPLY: "+reply)
     file.close()
     
+def write_function_confirmation(msg,reply):
 
+    date_time = datetime.datetime.now()   
+    file = open('confirmation.csv','a') 
+    file.write("\n")
+    file.write(str(date_time))
+    file.write("\t")
+    file.write('FNAME: '+msg['chat']['first_name'])
+    file.write("\t")
+    file.write('LNAME: '+msg['chat']['last_name'])
+    file.write("\t")
+    file.write('INPUT TEXT: '+msg['text'])
+    file.write("\t")
+    file.write("BOT REPLY: "+reply)
+    file.close()
     
 def handle(msg):
          
     chat_id = msg['chat']['id']
     command = msg['text']
+    
     if command.isnumeric():
        confirm_booking(command,recent)
     elif (command == 'Confirm'  or command == 'confirm' or command == 'CONFIRM'): 
         reply = 'Please send your contact number, our sales team will contact you soon'
         bot.sendMessage(chat_id, reply)
-        write_function(msg,reply)
-        
+        write_function_confirmation(msg,reply)
+        reply = 'Thanks for shopping in dapper colaber'
+        bot.sendMessage(chat_id, reply)
     else:
-        temp = 'not'
         message = str(command)
         print ('Got command: %s' % message)
         print(msg)
