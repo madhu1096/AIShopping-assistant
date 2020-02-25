@@ -232,10 +232,10 @@ def handle(msg):
     if command.isnumeric():
        confirm_booking(command,recent)
     elif (command == 'Confirm'  or command == 'confirm' or command == 'CONFIRM'): 
-        reply = 'Please send your contact number, our sales team will contact you soon'
+        reply = 'Thanks for shopping, our sales team will contact you soon'
         bot.sendMessage(chat_id, reply)
         write_function_confirmation(msg,reply)
-        reply = 'Thanks for shopping in dapper colaber'
+        reply = 'Happy shopping'
         bot.sendMessage(chat_id, reply)
     else:
         message = str(command)
