@@ -243,9 +243,25 @@ def write_report_chat_status(msg,req_id,prod_code):
     file.write(str(msg['chat']['last_name']))
     file.write("\t")
     file.write(str(prod_code))
+    file.write("\t")
+    file.write('Booking confirmed')
     file.write("\n")
     file.close()
- 
+
+def req_send_status(chat_id,req_y[req_found]):
+
+    reply_temp = req_y[req_found]
+    reply = 'Order Date   : '.format(reply_temp[0][0])
+    bot.sendMessage(chat_id, reply)
+    reply = 'First Name   : '.format(reply_temp[0][1])
+    bot.sendMessage(chat_id, reply)
+    reply = 'Last Name    : '.format(reply_temp[0][2])
+    bot.sendMessage(chat_id, reply)
+    reply = 'Product Code : '.format(reply_temp[0][3])
+    bot.sendMessage(chat_id, reply)          
+    reply = 'Status       : '.format(reply_temp[0][4])
+    
+               
     
 def handle(msg):
          
@@ -284,8 +300,7 @@ def handle(msg):
             if (req_found != ' '):
                reply = 'Below are the details for Request ID:{0}'.format(command)
                bot.sendMessage(chat_id, reply)
-               reply = str(req_y[req_found])
-               bot.sendMessage(chat_id, reply)
+               req_send_status(chat_id,req_y[req_found])
         else:
             reply = 'you have entered {0} digit values which is invald'.format(len(command)) 
             bot.sendMessage(chat_id, reply)
@@ -335,6 +350,3 @@ first_init=np.append(first_init,1)
 x1=cv.transform(first_init).toarray()
 pred=model.predict_classes(x1)
 bot.message_loop(handle)
-
-
- 
