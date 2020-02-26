@@ -285,11 +285,11 @@ def handle(msg):
                reply = 'Below are the details for Request ID:{0}'.format(command)
                bot.sendMessage(chat_id, reply)
                reply = str(req_y[req_found])
-               bot.sendMessage(chat_id, reply
+               bot.sendMessage(chat_id, reply)
         else:
             reply = 'you have entered {0} digit values which is invald'.format(len(command)) 
             bot.sendMessage(chat_id, reply)
-)
+
     elif (command == 'Confirm'  or command == 'confirm' or command == 'CONFIRM'): 
         
         date_time = datetime.datetime.now()   
