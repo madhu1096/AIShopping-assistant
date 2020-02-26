@@ -190,16 +190,13 @@ def bot_session(message,chat_id,msg ):
         ip_1=np.append(ip,1)
         x1 = cv.transform(ip_1).toarray()
         pred = model.predict_classes(x1)
-        print(pred)
         pred = pred[0]
-        print(pred)
         reply = str(dataset1.iloc[pred,1])
         if ip == 'quit' or ip == 'Quit':
             reply = 'bye.. Thanks for choosing dapper clobber'   
         bot.sendMessage(chat_id, reply)
         write_function(msg,reply)
         display_products(pred,chat_id,msg)
-
 
 def write_function(msg,reply):
     
@@ -273,9 +270,26 @@ def handle(msg):
         elif len(command) >= 11:
             reply = 'Please Enter valid 10 digit mobile number'
             bot.sendMessage(chat_id, reply)
+        elif len(command) ==6:
+            request  = pd.read_csv('confirmation_chat.csv',header=None,sep='\t')
+            req_x    = shirt.iloc[:,:1].values
+            req_y    = shirt.iloc[:,1:].values
+            req_found = ' '
+            for i in range(len(req_x)):
+               if req_x[i] == command:
+                  req_found = i
+            else:
+               reply = 'REQUEST ID IS INVALID.. if you have further queries please enter mobile number.. our team will contact you asap'
+               bot.sendMessage(chat_id, reply)
+            if (req_found != ' '):
+               reply = 'Below are the details for Request ID:{0}'.format(command)
+               bot.sendMessage(chat_id, reply)
+               reply = str(req_y[req_found])
+               bot.sendMessage(chat_id, reply
         else:
             reply = 'you have entered {0} digit values which is invald'.format(len(command)) 
             bot.sendMessage(chat_id, reply)
+)
     elif (command == 'Confirm'  or command == 'confirm' or command == 'CONFIRM'): 
         
         date_time = datetime.datetime.now()   
