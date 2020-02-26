@@ -176,6 +176,13 @@ def confirm_booking(chat_id,command,msg):
             bot.sendMessage(chat_id, reply)  
             reply = 'Please try again... :)'
             bot.sendMessage(chat_id, reply)  
+        else:
+            date_time = datetime.datetime.now()
+            file = open('temp.csv','w') 
+            file.write(str(command))
+            file.write("\t")
+            file.close()
+            
     
 def bot_session(message,chat_id,msg ):        
       
@@ -226,6 +233,23 @@ def write_function_confirmation(msg,reply):
     file.write("BOT REPLY: "+reply)
     file.close()
     
+def write_report_chat_status(msg,req_id,prod_code):
+ 
+    date_time = datetime.datetime.now()   
+    file = open('confirmation_chat.csv','a') 
+    file.write(str(req_id)
+    file.write('\t')
+    file.write(str(date_time))
+    file.write("\t")
+    file.write(str(msg['chat']['first_name']))
+    file.write("\t")
+    file.write(str(msg['chat']['last_name']))
+    file.write("\t")
+    file.write(str(prod_code))
+    file.write("\n")
+    file.close()
+ 
+    
 def handle(msg):
          
     chat_id = msg['chat']['id']
@@ -258,10 +282,21 @@ def handle(msg):
         file = open('confirmation.csv','a') 
         file.write("\n")
         file.write(str(date_time))
-        file.write("===========================================================")
+        file.write("=============================================================")
         file.close()
-        reply = 'Thanks for shopping, our sales team will contact you soon'
+        temp_file  = pd.read_csv('temp.csv',header=None,sep='\t')
+        prod_code  = temp_file.iloc[0,0].values
+ #getting random number
+        req_id    = random.randrange(100000,900000,1)
+ #writing file for chat request
+        write_report_chat_status(msg,req_id,prod_code)
+        reply  = 'Please save this Request ID to future reference '
         bot.sendMessage(chat_id, reply)
+        reply  = str(req_id)
+        bot.sendMessage(chat_id, reply)
+        reply  = 'Thanks for shopping, our sales team will contact you soon'
+        bot.sendMessage(chat_id, reply)
+ #writing confirmation report
         write_function_confirmation(msg,reply)
         reply = 'Happy shopping'
         bot.sendMessage(chat_id, reply)
