@@ -192,7 +192,7 @@ def bot_session(message,chat_id,msg ):
         pred = model.predict_classes(x1)
         pred = pred[0]
         reply = str(dataset1.iloc[pred,1])
-        if ip == 'quit' or ip == 'Quit':
+        if ip == 'quit' or ip == 'Quit'or ip == 'bye' or ip == 'Bye':
             reply = 'bye.. Thanks for choosing dapper clobber'   
         bot.sendMessage(chat_id, reply)
         write_function(msg,reply)
@@ -234,7 +234,7 @@ def write_report_chat_status(msg,req_id,prod_code):
  
     date_time = datetime.datetime.now()   
     file = open('confirmation_chat.csv','a') 
-    file.write(str(req_id)
+    file.write(str(req_id))
     file.write('\t')
     file.write(str(date_time))
     file.write("\t")
@@ -248,25 +248,27 @@ def write_report_chat_status(msg,req_id,prod_code):
     file.write("\n")
     file.close()
 
-def req_send_status(chat_id,req_y[req_found]):
+def req_send_status(chat_id,request_temp):
 
-    reply_temp = req_y[req_found]
-    reply = 'Order Date   : '.format(reply_temp[0][0])
+    reply_temp = list(request_temp)
+    reply = 'Order Date   : '+format(reply_temp[0])
     bot.sendMessage(chat_id, reply)
-    reply = 'First Name   : '.format(reply_temp[0][1])
+    reply = 'First Name   : '+format(reply_temp[1])
     bot.sendMessage(chat_id, reply)
-    reply = 'Last Name    : '.format(reply_temp[0][2])
+    reply = 'Last Name    : '+format(reply_temp[2])
     bot.sendMessage(chat_id, reply)
-    reply = 'Product Code : '.format(reply_temp[0][3])
+    reply = 'Product Code : '+format(reply_temp[3])
     bot.sendMessage(chat_id, reply)          
-    reply = 'Status       : '.format(reply_temp[0][4])
-    
+    reply = 'Status       : '+format(reply_temp[4])
+    bot.sendMessage(chat_id, reply)  
                
     
 def handle(msg):
          
+    
     chat_id = msg['chat']['id']
     command = msg['text']
+ 
     reply = command
     if command.isnumeric():
         if len(command) == 4 :
@@ -281,26 +283,29 @@ def handle(msg):
         elif len(command) == 10:
             write_function_confirmation(msg,reply) 
             bot.sendMessage(chat_id, reply)
-            reply = 'Please Type "confirm" to use you number to contact you. :)'
+            reply = 'Please Type "confirm" to use your number to contact you. :)'
             bot.sendMessage(chat_id, reply)
         elif len(command) >= 11:
             reply = 'Please Enter valid 10 digit mobile number'
             bot.sendMessage(chat_id, reply)
         elif len(command) ==6:
             request  = pd.read_csv('confirmation_chat.csv',header=None,sep='\t')
-            req_x    = shirt.iloc[:,:1].values
-            req_y    = shirt.iloc[:,1:].values
+            req_x    = request.iloc[:,:1].values
+            req_y    = request.iloc[:,1:].values
             req_found = ' '
+            
             for i in range(len(req_x)):
-               if req_x[i] == command:
+               if str(req_x[i][0]) == command:
                   req_found = i
-            else:
-               reply = 'REQUEST ID IS INVALID.. if you have further queries please enter mobile number.. our team will contact you asap'
-               bot.sendMessage(chat_id, reply)
+
             if (req_found != ' '):
                reply = 'Below are the details for Request ID:{0}'.format(command)
                bot.sendMessage(chat_id, reply)
-               req_send_status(chat_id,req_y[req_found])
+               request_temp = req_y[req_found]
+               req_send_status(chat_id,request_temp)
+            else:
+               reply = 'REQUEST ID IS INVALID.. if you have further queries please enter mobile number.. our team will contact you asap'
+               bot.sendMessage(chat_id, reply)               
         else:
             reply = 'you have entered {0} digit values which is invald'.format(len(command)) 
             bot.sendMessage(chat_id, reply)
@@ -314,12 +319,13 @@ def handle(msg):
         file.write("=============================================================")
         file.close()
         temp_file  = pd.read_csv('temp.csv',header=None,sep='\t')
-        prod_code  = temp_file.iloc[0,0].values
+        prod_code = temp_file[0][0]
+        
  #getting random number
         req_id    = random.randrange(100000,900000,1)
  #writing file for chat request
         write_report_chat_status(msg,req_id,prod_code)
-        reply  = 'Please save this Request ID to future reference '
+        reply  = 'Please save this Request ID for future reference '
         bot.sendMessage(chat_id, reply)
         reply  = str(req_id)
         bot.sendMessage(chat_id, reply)
