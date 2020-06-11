@@ -176,7 +176,7 @@ def handle(msg):
         
     
 
-bot = telepot.Bot('1070030315:AAG46yVpnlqNMQ4W3Z1g_iYFmtpSJEe1eY0')
+bot = telepot.Bot('*******************************************')
 first_init = 'hi'
 first_init=np.append(first_init,1)
 x1=cv.transform(first_init).toarray()
